@@ -4,6 +4,16 @@ Expo React Native movie browsing app powered by the OMDb API.
 
 Built with **Expo SDK 54**, **React Navigation**, **TanStack Query**, and **AsyncStorage** for favorites.
 
+## Screenshots
+
+| Home | Search |
+| :---: | :---: |
+| ![Home screen](docs/screenshots/home.png) | ![Search screen](docs/screenshots/search.png) |
+
+| Details | Favorites |
+| :---: | :---: |
+| ![Movie details screen](docs/screenshots/details.png) | ![Favorites screen](docs/screenshots/favorites.png) |
+
 ## Prerequisites
 
 - Node.js 20+ (Node 24 recommended for running tests)
@@ -147,6 +157,7 @@ The integration-style `MovieDetailsScreen` test mocks the movie API at the modul
 ```text
 .env.example        Example env vars (copy to .env in this same root folder)
 App.tsx             App entry point
+docs/screenshots/   App UI screenshots used in this README
 src/
   app/              Navigation and app-level providers
   features/
