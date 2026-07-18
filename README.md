@@ -14,6 +14,61 @@ Built with **Expo SDK 54**, **React Navigation**, **TanStack Query**, and **Asyn
 | :---: | :---: |
 | ![Movie details screen](docs/screenshots/details.png) | ![Favorites screen](docs/screenshots/favorites.png) |
 
+## Features
+
+- **Home** — curated OMDb collections, featured title, and an explore grid
+- **Search** — debounced title search with infinite pagination
+- **Movie details** — poster, metadata, ratings, plot, cast/crew facts, favorite toggle
+- **Favorites** — persisted watchlist with tab badge count, empty/error/loading states
+- **Resilience** — loading skeletons, empty states, and recoverable error UI across screens
+
+## Architecture
+
+Code is organized by product feature, not by technical layer:
+
+| Area | Responsibility |
+| --- | --- |
+| `src/app/` | Navigation + app providers (`QueryProvider`, `FavoritesProvider`) |
+| `src/features/movies/` | OMDb API, domain mapping, Home/Details UI + hooks |
+| `src/features/search/` | Search screen orchestration (`useSearchScreen`) + search UI |
+| `src/features/favorites/` | Context, reducer, AsyncStorage persistence, Favorites screen |
+| `src/shared/` | Domain-neutral theme, hooks, `AppHeader`, `StateMessage` |
+
+Useful entry points:
+
+- `App.tsx` — root composition
+- `src/app/navigation/` — tabs + stack routes
+- `src/features/movies/api/` — HTTP client, DTOs, errors, TanStack Query keys
+- `src/features/movies/domain/` — mappers/selectors (API shape stays out of UI)
+- `src/features/favorites/context/FavoritesProvider.tsx` — favorites state + persistence
+
+Screens stay thin: they wire hooks/context into UI. Data fetching and business rules live in hooks/domain modules.
+
+## Notable decisions
+
+- **TanStack Query + `movieKeys`** — cache keys are centralized so search/details/home stay consistent and invalidatable.
+- **DTO → domain mapping** — OMDb responses are normalized before UI use (`N/A` posters, ratings, people lists, etc.).
+- **Debounced search** — input updates immediately; the query waits so typing does not spam OMDb.
+- **Custom details header** — Movie Details uses `AppHeader` instead of native stack `headerRight`, because iOS glass / bar-button layout made the favorite control unreliable.
+- **Favorites hydration merge** — toggles update memory/UI immediately; storage hydrate merges with in-session adds so a fast first tap is not wiped by a late load.
+- **`shared/` stays domain-neutral** — movie/search/favorites-specific code stays in features, even when reused across tabs.
+
+## Reviewer checklist
+
+1. Add an OMDb key and run `npm start` (simulator or Expo Go on the same Wi-Fi).
+2. Confirm Home loads collections and opens a movie details screen.
+3. Search for a title (e.g. `Batman`), scroll to load more pages, clear the input.
+4. Favorite a movie from details; confirm the Favorites tab badge updates.
+5. Background/kill the app and reopen — favorites should still be there.
+6. Optional quality pass: `npm run lint && npm test && npx tsc --noEmit`.
+
+## Known limitations
+
+- Depends on OMDb availability / free-tier rate limits.
+- Targets **Expo SDK 54** (matches current store Expo Go).
+- No authentication or multi-device sync — favorites are local to the device.
+- Home collections are curated search terms, not a personalized feed.
+
 ## Prerequisites
 
 - Node.js 20+ (Node 24 recommended for running tests)
