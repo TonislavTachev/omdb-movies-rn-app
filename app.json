@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "OMDb Movies",
+    "slug": "omdb-movies-rn-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/app-logo.png",
+    "scheme": "omdbmovies",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/images/app-logo.png",
+      "bundleIdentifier": "com.anonymous.omdbmovies"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B0B0F",
+        "foregroundImage": "./assets/images/app-logo.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/images/app-logo.png"
+    },
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#0B0B0F",
+          "image": "./assets/images/app-logo.png",
+          "imageWidth": 120
+        }
+      ],
+      "expo-asset"
+    ]
+  }
+}
